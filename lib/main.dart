@@ -29,6 +29,8 @@ class _QuizPageState extends State<QuizPage> {
   Future<Quiz> futureQuiz;
   HtmlEncoding encoding = new HtmlEncoding();
   bool _isVisible = true;
+  //TODO: add scorekeeper
+  //TODO: add category screen
 
   // TO show the correct answer of a question
   Widget showingAnswer(String correctAns) {
@@ -51,8 +53,10 @@ class _QuizPageState extends State<QuizPage> {
           FlatButton(
             onPressed: () {
               setState(() {
-                questionNumber++;
-                _isVisible = true;
+                if (questionNumber < 9) {
+                  questionNumber++;
+                  _isVisible = true;
+                } else {} //TODO : Take another 10 quiz
               });
             },
             child: Text(
