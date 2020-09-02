@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myquizapp/models/quiz_model.dart';
+import 'package:myquizapp/services/html_encoding_service.dart';
 import 'package:myquizapp/services/quiz_services.dart';
 
 void main() {
@@ -25,6 +26,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   int questionNumber = 0;
   Future<Quiz> futureQuiz;
+  HtmlEncoding encoding = new HtmlEncoding();
 
   @override
   void initState() {
@@ -54,8 +56,10 @@ class _QuizPageState extends State<QuizPage> {
                       if (snapshot.hasError) {
                         return Text('Error');
                       }
+                      String text = encoding.htmlDecoder(
+                          snapshot.data.results[questionNumber].question);
                       return Text(
-                        '${snapshot.data.results[questionNumber].question}',
+                        '$text',
                         style: TextStyle(fontSize: 20),
                       );
                     } else {
