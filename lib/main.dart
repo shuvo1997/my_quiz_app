@@ -35,18 +35,20 @@ class _QuizPageState extends State<QuizPage> {
   //TODO: add category screen
 
   //To check a answer
-  void checkAnswer(String correctAns, String userPickedAns) {
+  bool checkAnswer(String correctAns, String userPickedAns) {
     if (userPickedAns == correctAns) {
       scorekeeper.add(Icon(
         Icons.check,
         color: Colors.green[900],
       ));
       numberOfCorrectAns++;
+      return true;
     } else {
       scorekeeper.add(Icon(
         Icons.close,
         color: Colors.red[900],
       ));
+      return false;
     }
   }
 
@@ -91,19 +93,22 @@ class _QuizPageState extends State<QuizPage> {
   //To build each option button
   Widget optionButton(
       int number, List<String> options, List<int> list, String correctAns) {
-    String userpickedAns = options[list[number]];
+    String userPickedAns = options[list[number]];
     return Visibility(
       visible: _isVisible,
       child: FlatButton(
         onPressed: () {
           setState(() {
-            _isVisible = false;
-            checkAnswer(correctAns, userpickedAns);
+            if (checkAnswer(correctAns, userPickedAns)) {
+              questionNumber++;
+            } else {
+              _isVisible = false;
+            }
           });
         },
         child: Text(
-          userpickedAns,
-          style: TextStyle(fontSize: 20, letterSpacing: 2),
+          userPickedAns,
+          style: TextStyle(fontSize: 18, letterSpacing: 2),
         ),
         color: Colors.blue,
       ),
@@ -167,6 +172,10 @@ class _QuizPageState extends State<QuizPage> {
                   }
                   String text = encoding.htmlDecoder(
                       snapshot.data.results[questionNumber].question);
+                  String category =
+                      snapshot.data.results[questionNumber].category;
+                  String difficulty =
+                      snapshot.data.results[questionNumber].difficulty;
                   String correctAns =
                       snapshot.data.results[questionNumber].correct_answer;
                   List<String> incorrectAns =
@@ -178,9 +187,31 @@ class _QuizPageState extends State<QuizPage> {
                         flex: 3,
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            '$text',
-                            style: TextStyle(fontSize: 25, letterSpacing: 2),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '$text',
+                                style:
+                                    TextStyle(fontSize: 25, letterSpacing: 2),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Category: $category',
+                                style:
+                                    TextStyle(fontSize: 15, letterSpacing: 2),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Difficulty: $difficulty',
+                                style:
+                                    TextStyle(fontSize: 15, letterSpacing: 2),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -191,7 +222,7 @@ class _QuizPageState extends State<QuizPage> {
                             child: optionBuilder(correctAns, incorrectAns),
                           )),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: scorekeeper,
                       )
                     ],
