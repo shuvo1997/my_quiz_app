@@ -30,7 +30,25 @@ class _QuizPageState extends State<QuizPage> {
   HtmlEncoding encoding = new HtmlEncoding();
   bool _isVisible = true;
   //TODO: add scorekeeper
+  List<Icon> scorekeeper = [];
+  int numberOfCorrectAns = 0;
   //TODO: add category screen
+
+  //To check a answer
+  void checkAnswer(String correctAns, String userPickedAns) {
+    if (userPickedAns == correctAns) {
+      scorekeeper.add(Icon(
+        Icons.check,
+        color: Colors.green[900],
+      ));
+      numberOfCorrectAns++;
+    } else {
+      scorekeeper.add(Icon(
+        Icons.close,
+        color: Colors.red[900],
+      ));
+    }
+  }
 
   // TO show the correct answer of a question
   Widget showingAnswer(String correctAns) {
@@ -73,16 +91,18 @@ class _QuizPageState extends State<QuizPage> {
   //To build each option button
   Widget optionButton(
       int number, List<String> options, List<int> list, String correctAns) {
+    String userpickedAns = options[list[number]];
     return Visibility(
       visible: _isVisible,
       child: FlatButton(
         onPressed: () {
           setState(() {
             _isVisible = false;
+            checkAnswer(correctAns, userpickedAns);
           });
         },
         child: Text(
-          options[list[number]],
+          userpickedAns,
           style: TextStyle(fontSize: 20, letterSpacing: 2),
         ),
         color: Colors.blue,
@@ -92,36 +112,32 @@ class _QuizPageState extends State<QuizPage> {
 
   //To randomize the options and build the options.
   Widget optionBuilder(String correct_ans, List<String> incorrect_ans) {
-    if (correct_ans != null && incorrect_ans != null) {
-      List<String> options = [];
-      options.add(correct_ans);
-      options.addAll(incorrect_ans);
-      Random random = new Random();
-      List<int> list = [];
-      int max = 4;
-      while (list.length < 4) {
-        int random_num = random.nextInt(max);
-        if (!list.contains(random_num)) {
-          list.add(random_num);
-        }
+    List<String> options = [];
+    options.add(correct_ans);
+    options.addAll(incorrect_ans);
+    Random random = new Random();
+    List<int> list = [];
+    int max = 4;
+    while (list.length < 4) {
+      int random_num = random.nextInt(max);
+      if (!list.contains(random_num)) {
+        list.add(random_num);
       }
-      return Column(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              optionButton(0, options, list, correct_ans),
-              optionButton(1, options, list, correct_ans),
-              optionButton(2, options, list, correct_ans),
-              optionButton(3, options, list, correct_ans),
-              showingAnswer(correct_ans),
-            ],
-          ),
-        ],
-      );
-    } else {
-      return Text('No Button');
     }
+    return Column(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            optionButton(0, options, list, correct_ans),
+            optionButton(1, options, list, correct_ans),
+            optionButton(2, options, list, correct_ans),
+            optionButton(3, options, list, correct_ans),
+            showingAnswer(correct_ans),
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -158,11 +174,26 @@ class _QuizPageState extends State<QuizPage> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '$text',
-                        style: TextStyle(fontSize: 25, letterSpacing: 2),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            '$text',
+                            style: TextStyle(fontSize: 25, letterSpacing: 2),
+                          ),
+                        ),
                       ),
-                      optionBuilder(correctAns, incorrectAns),
+                      Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: optionBuilder(correctAns, incorrectAns),
+                          )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: scorekeeper,
+                      )
                     ],
                   );
                 } else {
