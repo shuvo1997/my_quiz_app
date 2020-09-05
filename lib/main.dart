@@ -29,10 +29,22 @@ class _QuizPageState extends State<QuizPage> {
   Future<Quiz> futureQuiz;
   HtmlEncoding encoding = new HtmlEncoding();
   bool _isVisible = true;
-  //TODO: add scorekeeper
   List<Icon> scorekeeper = [];
   int numberOfCorrectAns = 0;
+  List<Icon> progressBar = [];
   //TODO: add category screen
+  //TODO: add a finishing screen
+  //TODO: Add a leaderboard
+
+  void progressBarBuilder() {
+    progressBar = [];
+    for (int i = 0; i < 10; i++) {
+      progressBar.add(Icon(
+        Icons.check_box_outline_blank,
+        color: Colors.blue,
+      ));
+    }
+  }
 
   //To check a answer
   bool checkAnswer(String correctAns, String userPickedAns) {
@@ -99,6 +111,10 @@ class _QuizPageState extends State<QuizPage> {
       child: FlatButton(
         onPressed: () {
           setState(() {
+            progressBar[questionNumber] = Icon(
+              Icons.check_box,
+              color: Colors.blue,
+            );
             if (checkAnswer(correctAns, userPickedAns)) {
               questionNumber++;
             } else {
@@ -149,6 +165,7 @@ class _QuizPageState extends State<QuizPage> {
   void initState() {
     super.initState();
     futureQuiz = getQuiz();
+    progressBarBuilder();
   }
 
   @override
@@ -183,8 +200,12 @@ class _QuizPageState extends State<QuizPage> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: progressBar,
+                      ),
                       Expanded(
-                        flex: 3,
+                        flex: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Column(
@@ -216,7 +237,7 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                       ),
                       Expanded(
-                          flex: 2,
+                          flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: optionBuilder(correctAns, incorrectAns),
