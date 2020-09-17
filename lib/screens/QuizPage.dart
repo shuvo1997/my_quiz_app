@@ -6,6 +6,9 @@ import 'package:myquizapp/services/html_encoding_service.dart';
 import 'package:myquizapp/services/quiz_services.dart';
 
 class QuizPage extends StatefulWidget {
+  final int categoryId;
+
+  QuizPage({@required this.categoryId});
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -21,6 +24,11 @@ class _QuizPageState extends State<QuizPage> {
   //TODO: add category screen
   //TODO: add a finishing screen
   //TODO: Add a leaderboard
+  @override
+  // TODO: implement widget
+
+  //To get arguments from Stateless widget
+  QuizPage get widget => super.widget;
 
   void progressBarBuilder() {
     progressBar = [];
@@ -186,6 +194,7 @@ class _QuizPageState extends State<QuizPage> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(widget.categoryId.toString()),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: progressBar,
