@@ -180,9 +180,9 @@ class _QuizPageState extends State<QuizPage> {
                   String difficulty =
                       snapshot.data.results[questionNumber].difficulty;
                   String correctAns =
-                      snapshot.data.results[questionNumber].correct_answer;
+                      snapshot.data.results[questionNumber].correctAnswer;
                   List<String> incorrectAns =
-                      snapshot.data.results[questionNumber].incorrect_answers;
+                      snapshot.data.results[questionNumber].incorrectAnswer;
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

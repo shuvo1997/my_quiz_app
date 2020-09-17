@@ -23,23 +23,23 @@ class Result {
   final String type;
   final String difficulty;
   final String question;
-  final String correct_answer;
-  final List<String> incorrect_answers;
+  final String correctAnswer;
+  final List<String> incorrectAnswer;
 
   Result(
       {this.category,
       this.type,
       this.difficulty,
       this.question,
-      this.correct_answer,
-      this.incorrect_answers});
+      this.correctAnswer,
+      this.incorrectAnswer});
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
       category: json['category'],
       type: json['type'],
       difficulty: json['difficulty'],
       question: json['question'],
-      correct_answer: json['correct_answer'],
-      incorrect_answers:
+      correctAnswer: json['correct_answer'],
+      incorrectAnswer:
           List<String>.from(json['incorrect_answers'].map((x) => x)));
 }
