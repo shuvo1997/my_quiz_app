@@ -7,13 +7,17 @@ import 'package:myquizapp/services/quiz_services.dart';
 
 class QuizPage extends StatefulWidget {
   final int categoryId;
+  final String token;
 
-  QuizPage({@required this.categoryId});
+  QuizPage({@required this.categoryId, @required this.token});
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
+  //Instance of quiz services class
+  QuizServices quizServices = new QuizServices();
+
   int questionNumber = 0;
   Future<Quiz> futureQuiz;
   HtmlEncoding encoding = new HtmlEncoding();
@@ -21,11 +25,8 @@ class _QuizPageState extends State<QuizPage> {
   List<Icon> scorekeeper = [];
   int numberOfCorrectAns = 0;
   List<Icon> progressBar = [];
-  //TODO: add category screen
   //TODO: add a finishing screen
   //TODO: Add a leaderboard
-  @override
-  // TODO: implement widget
 
   //To get arguments from Stateless widget
   QuizPage get widget => super.widget;
@@ -158,7 +159,13 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    futureQuiz = getQuiz();
+    if (widget.categoryId == 0) {
+      futureQuiz = quizServices.getRandomQuiz(widget.token);
+    } else {
+      futureQuiz =
+          quizServices.getCategoryQuiz(widget.categoryId, widget.token);
+      //print(widget.categoryId);
+    }
     progressBarBuilder();
   }
 
@@ -181,6 +188,7 @@ class _QuizPageState extends State<QuizPage> {
                   if (snapshot.hasError) {
                     return Text('Error');
                   }
+                  print(widget.token);
                   String text = encoding.htmlDecoder(
                       snapshot.data.results[questionNumber].question);
                   String category =
@@ -194,7 +202,6 @@ class _QuizPageState extends State<QuizPage> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(widget.categoryId.toString()),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: progressBar,
