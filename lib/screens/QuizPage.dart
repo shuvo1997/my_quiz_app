@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myquizapp/models/quiz_model.dart';
+import 'package:myquizapp/screens/FinishPage.dart';
 import 'package:myquizapp/services/html_encoding_service.dart';
 import 'package:myquizapp/services/quiz_services.dart';
 
@@ -30,6 +31,14 @@ class _QuizPageState extends State<QuizPage> {
 
   //To get arguments from Stateless widget
   QuizPage get widget => super.widget;
+
+  //to go to the finish page
+  Future navigateToFinishPage() async {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FinishPage(score: numberOfCorrectAns)));
+  }
 
   void progressBarBuilder() {
     progressBar = [];
@@ -83,7 +92,9 @@ class _QuizPageState extends State<QuizPage> {
                 if (questionNumber < 9) {
                   questionNumber++;
                   _isVisible = true;
-                } else {} //TODO : Take another 10 quiz
+                } else {
+                  navigateToFinishPage();
+                } //TODO : Take another 10 quiz
               });
             },
             child: Text(
@@ -110,7 +121,10 @@ class _QuizPageState extends State<QuizPage> {
               Icons.check_box,
               color: Colors.blue,
             );
-            if (checkAnswer(correctAns, userPickedAns)) {
+            if (questionNumber == 9 && checkAnswer(correctAns, userPickedAns)) {
+              numberOfCorrectAns++;
+              navigateToFinishPage();
+            } else if (checkAnswer(correctAns, userPickedAns)) {
               questionNumber++;
             } else {
               _isVisible = false;
@@ -119,7 +133,7 @@ class _QuizPageState extends State<QuizPage> {
         },
         child: Text(
           userPickedAns,
-          style: TextStyle(fontSize: 18, letterSpacing: 2),
+          style: TextStyle(fontSize: 18, letterSpacing: 2, color: Colors.white),
         ),
         color: Colors.blue,
       ),
@@ -173,7 +187,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz from API'),
+        title: Center(child: Text('Answer The Questions')),
         backgroundColor: Colors.blueAccent,
       ),
       backgroundColor: Colors.blue[100],

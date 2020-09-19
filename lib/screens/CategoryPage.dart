@@ -16,9 +16,11 @@ class _CategoryPageState extends State<CategoryPage> {
   Future<SessionToken> token;
   String tokenString;
   bool visible = true;
+  String appBarMsg = 'Quizzing App';
+
   //To goto the quiz page
   Future navigateToQuizPage(int categoryId) async {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => QuizPage(
@@ -29,6 +31,10 @@ class _CategoryPageState extends State<CategoryPage> {
 
   void alterVisibility() {
     visible = !visible;
+  }
+
+  Widget setText(String text) {
+    return Text(text);
   }
 
   @override
@@ -42,11 +48,12 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
+        title: Center(child: setText(appBarMsg)),
       ),
       body: SafeArea(
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Visibility(
                 visible: visible,
@@ -60,15 +67,29 @@ class _CategoryPageState extends State<CategoryPage> {
                           return Text('Error');
                         }
                         return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Container(
+                              child: Image.asset('images/welcome2.png'),
+                              padding: EdgeInsets.all(10),
+                              height: 300,
+                            ),
                             Text(
-                                'Your Session Token is generated successfully!'),
+                              'Welcome To Quizzing App',
+                              style: TextStyle(fontSize: 25),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             RaisedButton(
-                              child: Text('Lets Start'),
+                              child: Text(
+                                'Lets Start Quizzing',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
                               onPressed: () {
                                 setState(() {
                                   alterVisibility();
+                                  appBarMsg = 'Browse Categories';
                                 });
                               },
                               color: Colors.blue,
