@@ -9,4 +9,4 @@
     
 The demo video [link](quiz_app_demo.mp4)
 > This is a project for learning purpose.
-> Feel free to knock me if you want any kind of help.  
+> Feel free to knock me [here](https://t.me/shuvokkr) if you want any kind of help.  
