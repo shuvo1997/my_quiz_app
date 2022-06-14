@@ -5,6 +5,6 @@ import 'package:myquizapp/models/sessiontoken_model.dart';
 String url = 'https://opentdb.com/api_token.php?command=request';
 
 Future<SessionToken> getToken() async {
-  final response = await http.get('$url');
+  final response = await http.get(Uri.parse(url));
   return tokenFromJson(response.body);
 }

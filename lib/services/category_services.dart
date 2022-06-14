@@ -3,6 +3,6 @@ import 'package:http/http.dart' as http;
 
 String url = 'https://opentdb.com/api_category.php';
 Future<Category> getCategory() async {
-  final response = await http.get(url);
+  final response = await http.get(Uri.parse(url));
   return categoryFromJson(response.body);
 }
