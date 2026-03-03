@@ -1,0 +1,28 @@
+# .github/workflows/pr-guardian.yml
+name: PR Guardian
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run PR Guardian
+        run: |
+          curl -X POST https://felecia-tippable-wanda.ngrok-free.dev/webhook \
+            -H "Content-Type: application/json" \
+            -d '{
+              "action": "opened",
+              "pull_request": {
+                "number": ${{ github.event.pull_request.number }},
+                "title": "${{ github.event.pull_request.title }}",
+                "diff_url": "${{ github.event.pull_request.diff_url }}",
+                "html_url": "${{ github.event.pull_request.html_url }}",
+                "user": { "login": "${{ github.event.pull_request.user.login }}" },
+                "base": { "ref": "${{ github.base_ref }}" },
+                "head": { "ref": "${{ github.head_ref }}" }
+              }
+            }'
