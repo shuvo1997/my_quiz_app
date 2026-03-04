@@ -1,10 +1,8 @@
 # .github/workflows/pr-guardian.yml
 name: PR Guardian
-
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
   review:
     runs-on: ubuntu-latest
@@ -14,6 +12,7 @@ jobs:
         run: |
           curl -X POST https://felecia-tippable-wanda.ngrok-free.dev/webhook \
             -H "Content-Type: application/json" \
+            -H "X-Github-Event: pull_request" \
             -d '{
               "action": "opened",
               "pull_request": {
@@ -24,5 +23,19 @@ jobs:
                 "user": { "login": "${{ github.event.pull_request.user.login }}" },
                 "base": { "ref": "${{ github.base_ref }}" },
                 "head": { "ref": "${{ github.head_ref }}" }
+              },
+              "repository": {
+                "id": ${{ github.event.repository.id }},
+                "name": "${{ github.event.repository.name }}",
+                "full_name": "${{ github.repository }}",
+                "private": ${{ github.event.repository.private }},
+                "html_url": "${{ github.event.repository.html_url }}",
+                "description": "${{ github.event.repository.description }}",
+                "language": "${{ github.event.repository.language }}",
+                "default_branch": "${{ github.event.repository.default_branch }}",
+                "visibility": "${{ github.event.repository.visibility }}",
+                "forks": ${{ github.event.repository.forks }},
+                "open_issues": ${{ github.event.repository.open_issues }},
+                "watchers": ${{ github.event.repository.watchers }}
               }
             }'
